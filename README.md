@@ -1,8 +1,9 @@
 # raaco-organizer
-Script for creating printable A4 PDF folding-labels for electrical components fitting Raaco storage drawers. Creates two types of labels, drawer front labels and folded compartment labels inside the drawers.\
+Script for creating printable A4 PDF folding-labels for electrical components fitting Raaco storage drawers. Creates two types of labels, drawer front labels and folded compartment labels inside the drawers.
 ## Usage
-When properly configured, the only input required is component values, type of component and drawer size(#compartments and #folds).\
-Declare you component collection under raaco_organizer.py, example of how a large series of resistor is added and printed to pdf is shown below.\ 
+When properly configured, the only input required is component values, type of component and drawer size(#compartments and #folds).
+
+Declare you component collection under raaco_organizer.py, example of how a large series of resistor is added and printed to pdf is shown below.
 ```
 drawer_cfg = cabinet.DrawerConfig(2, 3)
 components_R = components.ComponentCollection()
@@ -25,7 +26,8 @@ s.process_cabinet(cabinet)
 * configurable number of compartments in each drawer
 * configurable number of folds in each compartment
 
-Labels from A4 paper, cut out, folded and put into the raaco drawers\
+Labels from A4 paper, cut out, folded and put into the raaco drawers
 ![Finished labels](https://github.com/tonybjorkman/raaco-organizer/blob/master/doc/finished_labels.jpg)
-Raw A4 PDF printout\
+
+Raw A4 PDF printout
 ![Raw labels](https://github.com/tonybjorkman/raaco-organizer/blob/master/doc/single%20page%20result.png)
