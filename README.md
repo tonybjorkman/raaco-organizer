@@ -1,6 +1,6 @@
 # raaco-organizer
 Script for creating printable A4 PDF folding-labels for electrical components fitting Raaco storage drawers. Creates two types of labels, drawer front labels and folded compartment labels inside the drawers.\
-##Usage
+## Usage
 When properly configured, the only input required is component values, type of component and drawer size(#compartments and #folds).\
 Declare you component collection under raaco_organizer.py, example of how a large series of resistor is added and printed to pdf is shown below.\ 
 ```
@@ -19,7 +19,7 @@ s = painter.SheetStack()
 s.process_cabinet(cabinet)
 ```
 
-##Features
+## Features
 * resistor color coding according to IEC 60062:2016
 * custom icons for front labels
 * configurable number of compartments in each drawer
