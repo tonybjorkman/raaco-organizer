@@ -1,6 +1,6 @@
 from interfaces import *
 from PIL import Image,ImageDraw,ImageFont
-
+import components
 
 def cm_to_px( cm):
     return round(cm * 236.22)
@@ -8,9 +8,15 @@ def cm_to_px( cm):
 def rotated_text(text,angle,font):
     image = Image.new('RGB', (1, 1), (255, 255, 255))
     draw_txt = ImageDraw.Draw(image)
-    width, height = draw_txt.textsize(text,font=font)
+    #width, height = draw_txt.textsize(text,font=font)
+    bbox = font.getbbox(text)
+
+    # Calculate text width and height from the bounding box
+    width = bbox[2] - bbox[0]
+    height = bbox[3] - bbox[1]
     print("{} has width: {} height: {}".format(text,width,height))
-    image2 = Image.new('RGB', (width, height), (255, 255, 255))
+    # TODO only a quick fix for the height to multiply with 2! 
+    image2 = Image.new('RGB', (width, height*2), (255, 255, 255))
     draw_txt2 = ImageDraw.Draw(image2)
     draw_txt2.text((0, 0), text, font=font, fill=(0, 0, 0))
     image2=image2.rotate(angle)
@@ -235,32 +241,37 @@ class Compartment(IPaintable):
             start = (1,1+complete_foldstep)
             stop = (self.width,1+self.height + complete_foldstep)
             draw.rectangle((start,stop),outline="black",width=line_width)
-
-            # resistor color code
-            #fold_dist=30
-            #offset=0
-            #c_width=120
-            #c_height=120
-            #for color in f.component.get_resistor_colors(1):
-            #    draw.rectangle(((890+offset*c_width,start[1]+fold_dist), (890+(offset+1)*c_width-10,start[1]+c_height+fold_dist)),fill=color, outline="black", width=line_width)
-            #    offset+=1
+            
+            if isinstance(f.component, components.Resistor):
+                # resistor color code
+                fold_dist=30
+                offset=0
+                c_width=120
+                c_height=120
+                for color in f.component.get_resistor_colors(1):
+                    draw.rectangle(((890+offset*c_width,start[1]+fold_dist), (890+(offset+1)*c_width-10,start[1]+c_height+fold_dist)),fill=color, outline="black", width=line_width)
+                    offset+=1
 
             #first title
             draw.text((start[0]+side_padding,start[1]+5),str(f.component.text),font=fnt,fill=(0,0,0))
             start = (1,stop[1]+self.fold_length)
-            draw.rectangle((start, stop), outline="black", width=line_width)
+            # TODO fix line below that i commented out 
+
+            draw.rectangle(((start[0],stop[1]), (stop[0],start[1])), outline="black", width=line_width)
+            
             #bottom_title
             draw.text((start[0] + side_padding, stop[1] + 5), str(f.component.text), font=tiny_fnt, fill=(0, 0, 0))
             stop = (self.width,start[1]+self.height)
             draw.rectangle((start, stop), outline="black", width=line_width)
 
-            # resistor color code
-            #offset=0
-            #c_width=120
-            #c_height=120
-            #for color in reversed(f.component.get_resistor_colors(1)):
-            #    draw.rectangle(((50+offset*c_width,stop[1]-c_height-fold_dist), (50+(offset+1)*c_width-10,stop[1]-fold_dist)),fill=color, outline="black", width=line_width)
-            #    offset+=1
+            if isinstance(f.component, components.Resistor):
+                # resistor color code
+                offset=0
+                c_width=120
+                c_height=120
+                for color in reversed(f.component.get_resistor_colors(1)):
+                    draw.rectangle(((50+offset*c_width,stop[1]-c_height-fold_dist), (50+(offset+1)*c_width-10,stop[1]-fold_dist)),fill=color, outline="black", width=line_width)
+                    offset+=1
 
             #rotated title
             rot_img = rotated_text(str(f.component.text),180,fnt)

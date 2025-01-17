@@ -1,17 +1,17 @@
 from PIL import Image, ImageDraw, ImageFont
-import cabinet
+import cabinet_parts
 import painter
 import components
 from pathlib import Path
 # get an image
 
 def build_capacitors():
-    drawer_cfg = cabinet.DrawerConfig(3, 1)
+    drawer_cfg = cabinet_parts.DrawerConfig(3, 1)
     C_img_url = Path(__file__).parent / 'icons/C_ceramic.png'
     C_img = Image.open(C_img_url)
     drawer_cfg.set_drawer_icon(C_img)
     drawer_cfg.drawer_align_comp_right = False
-    drawers_C = cabinet.DrawerCollection(drawer_cfg)
+    drawers_C = cabinet_parts.DrawerCollection(drawer_cfg)
 
     components_C = components.ComponentCollection()
     components_C.insert_values_as_decades([1.0, 2.2, 4.7], [10 * 1e-12, 100 * 1e-12, 1e-9, 10 * 1e-9], "capacitor")
@@ -20,12 +20,12 @@ def build_capacitors():
     return drawers_C
 
 def build_transistor():
-    drawer_cfg = cabinet.DrawerConfig(3, 1)
+    drawer_cfg = cabinet_parts.DrawerConfig(3, 1)
     C_img_url = Path(__file__).parent / 'icons/Tnpn.png'
     C_img = Image.open(C_img_url)
     drawer_cfg.set_drawer_icon(C_img)
     drawer_cfg.drawer_align_comp_right = False
-    drawers_C = cabinet.DrawerCollection(drawer_cfg)
+    drawers_C = cabinet_parts.DrawerCollection(drawer_cfg)
 
     components_C = components.ComponentCollection()
     components_C.insert_values(["BC337","BC517","BC547B"],"")
@@ -34,7 +34,7 @@ def build_transistor():
     return drawers_C
 
 def build_resistors():
-    drawer_cfg = cabinet.DrawerConfig(2, 3)
+    drawer_cfg = cabinet_parts.DrawerConfig(2, 3)
 
     components_R = components.ComponentCollection()
     components_R.insert_values_as_decades(
@@ -42,19 +42,19 @@ def build_resistors():
         , [1, 10, 100, 1000, 10000, 100000], "resistor")
     components_R.insert_values([1 * 10 ** 6, 1.5 * 10 ** 6, 2 * 10 ** 6, 3 * 10 ** 6], "resistor")
     resistors = components_R.get_component_list()
-    drawers_R = cabinet.DrawerCollection(drawer_cfg)
+    drawers_R = cabinet_parts.DrawerCollection(drawer_cfg)
     drawers_R.insert_list(resistors)
     return drawers_R
 
 def build(comp,folds,icon,valuelist):
     ''' Takes number of compartments, and the number of paper fold slots within these compartments '''
-    drawer_cfg = cabinet.DrawerConfig(comp, folds)
+    drawer_cfg = cabinet_parts.DrawerConfig(comp, folds)
     string = 'icons/'+icon+'.png'
     C_img_url = Path(__file__).parent / string
     C_img = Image.open(C_img_url)
     drawer_cfg.set_drawer_icon(C_img)
     drawer_cfg.drawer_align_comp_right = False
-    drawers_C = cabinet.DrawerCollection(drawer_cfg)
+    drawers_C = cabinet_parts.DrawerCollection(drawer_cfg)
 
     components_C = components.ComponentCollection()
     components_C.insert_values(valuelist,"")
@@ -62,7 +62,7 @@ def build(comp,folds,icon,valuelist):
     drawers_C.insert_list(capacitors)
     return drawers_C
 
-cabinet = cabinet.Cabinet()
+cabinet = cabinet_parts.Cabinet()
 # My component collection
 
 # List all the components I have
